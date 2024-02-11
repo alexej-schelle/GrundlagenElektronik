@@ -14,13 +14,15 @@ import operator
 
 n_total = 100000 # Variable für Anzahl der Monte-Carlo Iterationen
 
-VarVelocityPerpendicular = [] # Variabel
+VarVelocityPerpendicular = [] # Array zur Speicherung von Geschwindkeiten
+VarWaveLength = [] # Array zur Speicherung von Wellenlaengen
 
 Voltage = 1.0 # Volts in units of Volts
 VarEnergy = 1.602176634E-19*Voltage # In Units of Joule (U = 1.0 Volts)
+
 StartEnergy = VarEnergy
 
-Temperature = 5000.0 # In Units of Kelvin
+Temperature = 200.0 # In Units of Kelvin
 ThermalEnergy = 1.5*1.38064852E-23*Temperature # In Units of Joule  
 
 ElektronenMasse = 9.10938356E-31 
@@ -33,6 +35,8 @@ for i in range(0, n_total):
     if (operator.gt(min((math.exp(StartEnergy/ThermalEnergy))/(math.exp(VarEnergy/ThermalEnergy)),1.00),random.uniform(0.00,1.00))):
 
         VarVelocityPerpendicular.append(math.sqrt(math.fabs(2.0*VarEnergy/ElektronenMasse))/1000.0)
+        VarWaveLength.append(math.sqrt(math.fabs(math.pi/(VarEnergy/ElektronenMasse*1.0E9))))
+
         StartEnergy = VarEnergy
         
 plt.figure(1)
@@ -40,4 +44,12 @@ plt.hist(VarVelocityPerpendicular, bins = 250)
 plt.tick_params(axis='both', which='major', labelsize = 12)
 plt.xlabel('$v~[10^3~Meter~pro~Sekunde]$', fontsize = 14)
 plt.ylabel('$p$', fontsize = 14)
-plt.savefig('/Users/krealix/Desktop/IU_Internationale_Hochschule/DSGE0723/SourceCode/Figure1.png')
+plt.savefig('/Users/krealix/Desktop/IU_Internationale_Hochschule/DSGE0723/SourceCode/FigureGeschwindigkeit.png')
+
+plt.figure(2)
+plt.hist(VarWaveLength, bins = 250)
+plt.tick_params(axis='both', which='major', labelsize = 12)
+plt.xlabel('$\lambda~[nm]$', fontsize = 14)
+plt.ylabel('$p$', fontsize = 14)
+plt.xlim([0.0, 1.0E-8])
+plt.savefig('/Users/krealix/Desktop/IU_Internationale_Hochschule/DSGE0723/SourceCode/FigureWellenlaenge.png')
